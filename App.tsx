@@ -1,139 +1,182 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet } from 'react-native';
-import MainScreen from './Screen/MainScreen';
-import LoginScreen from './Screen/LoginScreen';
-import Bali from './Screen/Bali';
-import Maldives from './Screen/Maldives';
-import Thailand from './Screen/Thailand';
-import Nepal from './Screen/Nepal';
-import Bhutan from './Screen/Bhutan';
-import SriLanka from './Screen/SriLanka';
-import Dubai from './Screen/Dubai';
-import Singapore from './Screen/Singapore';
-import Indonesia from './Screen/Indonesia';
-import Vietnam from './Screen/Vietnam';
-import Malaysia from './Screen/Malaysia';
-import Lakshadweep from './Screen/laks';
-import Booking from './Screen/Booking';
-import ProfileScreen from './Screen/ProfileScreen';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import { StyleSheet, View } from 'react-native';
+import { navigationRef } from './src/navigation/NavigationService';
+import MainScreen from './src/Screen/MainScreen';
+import LoginScreen from './src/Screen/LoginScreen';
+import Bali from './src/Screen/Bali';
+import Maldives from './src/Screen/Maldives';
+import Thailand from './src/Screen/Thailand';
+import Nepal from './src/Screen/Nepal';
+import Bhutan from './src/Screen/Bhutan';
+import SriLanka from './src/Screen/SriLanka';
+import Dubai from './src/Screen/Dubai';
+import Singapore from './src/Screen/Singapore';
+import Indonesia from './src/Screen/Indonesia';
+import Vietnam from './src/Screen/Vietnam';
+import Malaysia from './src/Screen/Malaysia';
+import Lakshadweep from './src/Screen/laks';
+import Booking from './src/Screen/Booking';
+import ProfileScreen from './src/Screen/ProfileScreen';
+import AITripPlanner from './src/Screen/AITripPlanner';
+import SocialDiscover from './src/Screen/SocialDiscover';
+import SavedDestinations from './src/Screen/SavedDestinations';
+import Payment from './src/Screen/Payment';
+import MyBookings from './src/Screen/MyBookings';
+import { BookingProvider } from './src/Context/BookingContext';
+import Footer from './src/Screen/Footer';
+
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#f4511e',
-          },
-          headerShown: false,
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      >
-        <Stack.Screen
-          name="MainScreen"
-          component={MainScreen}
-          options={{ title: 'Home' }}
-        />
-        
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{ title: 'Profile' }}
-        />
-        
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ title: 'Login' }}
-        />
-        
-        <Stack.Screen
-          name="Booking"
-          component={Booking}
-          options={{ title: 'Booking' }}
-        />
-        
-        <Stack.Screen
-          name="Bali"
-          component={Bali}
-          options={{ title: 'BALI Info' }}
-        />
-        
-        <Stack.Screen
-          name="Maldives"
-          component={Maldives}
-          options={{ title: 'MALDIVES Info' }}
-        />
-        
-        <Stack.Screen
-          name="Thailand"
-          component={Thailand}
-          options={{ title: 'THAILAND Info' }}
-        />
-        
-        <Stack.Screen
-          name="Nepal"
-          component={Nepal}
-          options={{ title: 'NEPAL Info' }}
-        />
-        
-        <Stack.Screen
-          name="Bhutan"
-          component={Bhutan}
-          options={{ title: 'BHUTAN Info' }}
-        />
-        
-        <Stack.Screen
-          name="SriLanka"
-          component={SriLanka}
-          options={{ title: 'SRI LANKA Info' }}
-        />
-        
-        <Stack.Screen
-          name="Dubai"
-          component={Dubai}
-          options={{ title: 'DUBAI / UAE Info' }}
-        />
-        
-        <Stack.Screen
-          name="Singapore"
-          component={Singapore}
-          options={{ title: 'SINGAPORE Info' }}
-        />
-        
-        <Stack.Screen
-          name="Indonesia"
-          component={Indonesia}
-          options={{ title: 'INDONESIA Info' }}
-        />
-        
-        <Stack.Screen
-          name="Vietnam"
-          component={Vietnam}
-          options={{ title: 'VIETNAM Info' }}
-        />
-        
-        <Stack.Screen
-          name="Malaysia"
-          component={Malaysia}
-          options={{ title: 'MALAYSIA Info' }}
-        />
-        
-        <Stack.Screen
-          name="Lakshadweep"
-          component={Lakshadweep}
-          options={{ title: 'LAKSHADWEEP Info' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <BookingProvider>
+      <SafeAreaProvider>
+        <NavigationContainer ref={navigationRef}>
+          <View style={styles.container}>
+            <Stack.Navigator
+              initialRouteName="Login"
+              screenOptions={{
+                headerShown: false,
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                gestureEnabled: true,
+                gestureDirection: 'horizontal',
+              }}
+            >
+              <Stack.Screen
+                name="MainScreen"
+                component={MainScreen}
+                options={{ title: 'Home' }}
+              />
+
+              <Stack.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{ title: 'Profile' }}
+              />
+
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ title: 'Login' }}
+              />
+
+              <Stack.Screen
+                name="Booking"
+                component={Booking}
+                options={{ title: 'Booking' }}
+              />
+
+              <Stack.Screen
+                name="Payment"
+                component={Payment}
+                options={{ title: 'Payment' }}
+              />
+
+              <Stack.Screen
+                name="MyBookings"
+                component={MyBookings}
+                options={{ title: 'My Bookings' }}
+              />
+
+              <Stack.Screen
+                name="Bali"
+                component={Bali}
+                options={{ title: 'BALI Info' }}
+              />
+
+              <Stack.Screen
+                name="Maldives"
+                component={Maldives}
+                options={{ title: 'MALDIVES Info' }}
+              />
+
+              <Stack.Screen
+                name="Thailand"
+                component={Thailand}
+                options={{ title: 'THAILAND Info' }}
+              />
+
+              <Stack.Screen
+                name="Nepal"
+                component={Nepal}
+                options={{ title: 'NEPAL Info' }}
+              />
+
+              <Stack.Screen
+                name="Bhutan"
+                component={Bhutan}
+                options={{ title: 'BHUTAN Info' }}
+              />
+
+              <Stack.Screen
+                name="SriLanka"
+                component={SriLanka}
+                options={{ title: 'SRI LANKA Info' }}
+              />
+
+              <Stack.Screen
+                name="Dubai"
+                component={Dubai}
+                options={{ title: 'DUBAI / UAE Info' }}
+              />
+
+              <Stack.Screen
+                name="Singapore"
+                component={Singapore}
+                options={{ title: 'SINGAPORE Info' }}
+              />
+
+              <Stack.Screen
+                name="Indonesia"
+                component={Indonesia}
+                options={{ title: 'INDONESIA Info' }}
+              />
+
+              <Stack.Screen
+                name="Vietnam"
+                component={Vietnam}
+                options={{ title: 'VIETNAM Info' }}
+              />
+
+              <Stack.Screen
+                name="Malaysia"
+                component={Malaysia}
+                options={{ title: 'MALAYSIA Info' }}
+              />
+
+              <Stack.Screen
+                name="Lakshadweep"
+                component={Lakshadweep}
+                options={{ title: 'LAKSHADWEEP Info' }}
+              />
+
+              <Stack.Screen
+                name="AITripPlanner"
+                component={AITripPlanner}
+                options={{ title: 'AI Trip Planner' }}
+              />
+
+              <Stack.Screen
+                name="SocialDiscover"
+                component={SocialDiscover}
+                options={{ title: 'Social Discover' }}
+              />
+
+              <Stack.Screen
+                name="SavedDestinations"
+                component={SavedDestinations}
+                options={{ title: 'Saved Destinations' }}
+              />
+            </Stack.Navigator>
+            <Footer />
+          </View>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </BookingProvider>
   );
 };
 
