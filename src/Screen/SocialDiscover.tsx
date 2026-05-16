@@ -8,6 +8,8 @@ import {
   Image,
   Dimensions,
   FlatList,
+  Modal,
+  TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -20,6 +22,9 @@ const COLUMN_WIDTH = (width - SIZES.padding * 2 - 15) / 2;
 
 const SocialDiscover = () => {
   const [viewMode, setViewMode] = useState<'feed' | 'map'>('feed');
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+  const [newPostTitle, setNewPostTitle] = useState('');
+  const [newPostLocation, setNewPostLocation] = useState('');
 
   const posts = [
     {
@@ -56,6 +61,27 @@ const SocialDiscover = () => {
     }
   ];
 
+  const [discoveries, setDiscoveries] = useState(posts);
+
+  const handleCreatePost = () => {
+    if (!newPostTitle.trim() || !newPostLocation.trim()) return;
+
+    const newPost = {
+      id: Date.now().toString(),
+      user: 'You',
+      avatar: 'https://i.pravatar.cc/150?u=you',
+      title: newPostTitle,
+      location: newPostLocation,
+      image: require('../assets/image2.jpg'), // Placeholder for new post
+      likes: '0',
+    };
+
+    setDiscoveries([newPost, ...discoveries]);
+    setNewPostTitle('');
+    setNewPostLocation('');
+    setIsCreateModalVisible(false);
+  };
+
   const renderPost = ({ item }: { item: any }) => (
     <View style={styles.postCard}>
       <Image source={item.image} style={styles.postImage} />
@@ -86,17 +112,17 @@ const SocialDiscover = () => {
         <View style={styles.header}>
           <Text style={styles.title}>Community Discovery</Text>
           <View style={styles.toggleContainer}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.toggleBtn, viewMode === 'feed' && styles.activeToggle]}
               onPress={() => setViewMode('feed')}
             >
-              <MaterialIcons name="grid-view" size={20} color={viewMode === 'feed' ? COLORS.white : COLORS.textLight} />
+              <MaterialIcons name="grid-view" size={20} color={COLORS.white} />
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.toggleBtn, viewMode === 'map' && styles.activeToggle]}
               onPress={() => setViewMode('map')}
             >
-              <MaterialIcons name="map" size={20} color={viewMode === 'map' ? COLORS.white : COLORS.textLight} />
+              <MaterialIcons name="map" size={20} color={COLORS.white} />
             </TouchableOpacity>
           </View>
         </View>
@@ -104,7 +130,7 @@ const SocialDiscover = () => {
 
       {viewMode === 'feed' ? (
         <FlatList
-          data={posts}
+          data={discoveries}
           keyExtractor={(item) => item.id}
           numColumns={2}
           contentContainerStyle={styles.feedContent}
@@ -117,13 +143,78 @@ const SocialDiscover = () => {
             </View>
           )}
         />
-      ) : (
-        <View style={styles.mapMock}>
-          <MaterialIcons name="explore" size={80} color="rgba(0,0,0,0.1)" />
-          <Text style={styles.mapText}>Interactive Map loading...</Text>
-          <Text style={styles.mapSubtext}>Showing 24 secrets nearby</Text>
+      ) : null}
+
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => setIsCreateModalVisible(true)}
+      >
+        <LinearGradient
+          colors={[COLORS.primary, '#6366f1']}
+          style={styles.fabGradient}
+        >
+          <MaterialIcons name="add" size={32} color={COLORS.white} />
+        </LinearGradient>
+      </TouchableOpacity>
+
+      {/* Create Post Modal */}
+      <Modal
+        visible={isCreateModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setIsCreateModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Share Discovery</Text>
+              <TouchableOpacity onPress={() => setIsCreateModalVisible(false)}>
+                <MaterialIcons name="close" size={24} color={COLORS.text} />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.imagePickerPlaceholder}>
+              <MaterialIcons name="add-a-photo" size={40} color={COLORS.textLight} />
+              <Text style={styles.imagePickerText}>Add a photo</Text>
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Title</Text>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="What did you find?"
+                value={newPostTitle}
+                onChangeText={setNewPostTitle}
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Location</Text>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Where is it?"
+                value={newPostLocation}
+                onChangeText={setNewPostLocation}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.postBtn}
+              onPress={handleCreatePost}
+            >
+              <LinearGradient
+                colors={COLORS.gradientPrimary}
+                style={styles.postBtnGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+              >
+                <Text style={styles.postBtnText}>Post Discovery</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
         </View>
-      )}
+      </Modal>
 
 
     </View>
@@ -136,8 +227,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   headerArea: {
-    backgroundColor: COLORS.white,
-    ...SHADOWS.light,
+    backgroundColor: COLORS.primary,
+    ...SHADOWS.medium,
   },
   header: {
     flexDirection: 'row',
@@ -148,11 +239,11 @@ const styles = StyleSheet.create({
   },
   title: {
     ...FONTS.h3,
-    color: COLORS.text,
+    color: COLORS.white,
   },
   toggleContainer: {
     flexDirection: 'row',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: 12,
     padding: 4,
   },
@@ -162,7 +253,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   activeToggle: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: 'rgba(255,255,255,0.3)',
   },
   feedContent: {
     padding: SIZES.padding,
@@ -252,7 +343,92 @@ const styles = StyleSheet.create({
     ...FONTS.body2,
     color: COLORS.textLight,
     marginTop: 5,
-  }
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 100,
+    right: 20,
+    ...SHADOWS.heavy,
+  },
+  fabGradient: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: COLORS.white,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    padding: SPACING.xl,
+    paddingBottom: 40,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: SPACING.xl,
+  },
+  modalTitle: {
+    ...FONTS.h2,
+    color: COLORS.text,
+  },
+  imagePickerPlaceholder: {
+    width: '100%',
+    height: 150,
+    backgroundColor: '#f8fafc',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#e2e8f0',
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: SPACING.xl,
+  },
+  imagePickerText: {
+    ...FONTS.label,
+    color: COLORS.textLight,
+    marginTop: 10,
+  },
+  inputGroup: {
+    marginBottom: SPACING.lg,
+  },
+  inputLabel: {
+    ...FONTS.label,
+    color: COLORS.text,
+    marginBottom: 8,
+    fontWeight: '600',
+  },
+  modalInput: {
+    backgroundColor: '#f8fafc',
+    borderRadius: 15,
+    padding: 15,
+    ...FONTS.body2,
+    color: COLORS.text,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+  },
+  postBtn: {
+    marginTop: SPACING.xl,
+    borderRadius: 15,
+    overflow: 'hidden',
+    ...SHADOWS.medium,
+  },
+  postBtnGradient: {
+    paddingVertical: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  postBtnText: {
+    ...FONTS.h3,
+    color: COLORS.white,
+  },
 });
 
 export default SocialDiscover;

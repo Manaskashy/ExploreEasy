@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 60,
     paddingHorizontal: SIZES.padding,
     overflow: 'hidden',
     ...SHADOWS.heavy,

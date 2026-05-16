@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   ImageBackground,
   Dimensions,
   Animated,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -20,29 +19,27 @@ import { COLORS, SHADOWS, SIZES, SPACING, FONTS } from '../styles/Theme';
 
 const { width, height } = Dimensions.get('window');
 
-const VALID_USERNAME = 'admin';
-const VALID_PASSWORD = 'password123';
-
 type RootStackParamList = {
-  MainScreen: undefined;
-  Profile: undefined;
   Login: undefined;
-  Booking: undefined;
+  SignUp: undefined;
+  MainScreen: undefined;
 };
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
+
+type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 interface Props {
-  navigation: LoginScreenNavigationProp;
+  navigation: SignUpScreenNavigationProp;
 }
 
-const LoginScreen = ({ navigation }: Props) => {
-  const [username, setUsername] = useState('');
+const SignUpScreen = ({ navigation }: Props) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
 
-  useEffect(() => {
+  React.useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -53,17 +50,9 @@ const LoginScreen = ({ navigation }: Props) => {
         toValue: 0,
         duration: 800,
         useNativeDriver: true,
-      })
+      }),
     ]).start();
   }, []);
-
-  const handleLogin = () => {
-    if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-      navigation.replace('MainScreen');
-    } else {
-      Alert.alert('Login Failed', 'Invalid username or password.');
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -73,31 +62,52 @@ const LoginScreen = ({ navigation }: Props) => {
         style={styles.backgroundImage}
       >
         <LinearGradient
-          colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,0.7)']}
+          colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)']}
           style={styles.overlay}
         >
-          <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-            <Animated.View style={[
-              styles.content,
-              { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }
-            ]}>
+          <SafeAreaView style={styles.safeArea}>
+            <Animated.View 
+              style={[
+                styles.content,
+                { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }
+              ]}
+            >
+              <TouchableOpacity 
+                style={styles.backButton}
+                onPress={() => navigation.goBack()}
+              >
+                <MaterialIcons name="arrow-back" size={28} color={COLORS.white} />
+              </TouchableOpacity>
+
               <View style={styles.headerTextContainer}>
                 <Text style={styles.brandTitle}>ExploreEasy</Text>
-                <Text style={styles.brandSubtitle}>Your journey starts here</Text>
+                <Text style={styles.brandSubtitle}>Create your account</Text>
               </View>
 
               <View style={styles.glassCard}>
-                <Text style={styles.loginTitle}>Welcome Back</Text>
+                <Text style={styles.loginTitle}>Sign Up</Text>
 
                 <View style={styles.inputContainer}>
-                  <Text style={styles.inputLabel}>Username</Text>
+                  <Text style={styles.inputLabel}>Full Name</Text>
                   <TextInput
                     style={styles.input}
-                    placeholder="Enter your username"
-                    value={username}
-                    onChangeText={setUsername}
+                    placeholder="John Doe"
+                    placeholderTextColor="rgba(255,255,255,0.4)"
+                    value={name}
+                    onChangeText={setName}
+                  />
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Email</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="example@email.com"
+                    placeholderTextColor="rgba(255,255,255,0.4)"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
                     autoCapitalize="none"
-                    placeholderTextColor="rgba(255,255,255,0.5)"
                   />
                 </View>
 
@@ -105,41 +115,34 @@ const LoginScreen = ({ navigation }: Props) => {
                   <Text style={styles.inputLabel}>Password</Text>
                   <TextInput
                     style={styles.input}
-                    placeholder="Enter your password"
+                    placeholder="********"
+                    placeholderTextColor="rgba(255,255,255,0.4)"
+                    secureTextEntry
                     value={password}
                     onChangeText={setPassword}
-                    secureTextEntry
-                    placeholderTextColor="rgba(255,255,255,0.5)"
                   />
                 </View>
 
                 <TouchableOpacity
                   style={styles.loginButton}
-                  onPress={handleLogin}
+                  onPress={() => navigation.navigate('MainScreen')}
                   activeOpacity={0.8}
                 >
                   <LinearGradient
-                    colors={COLORS.gradientPrimary}
+                    colors={['#6366f1', '#a855f7']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.gradientButton}
                   >
-                    <Text style={styles.buttonText}>Sign In</Text>
+                    <Text style={styles.buttonText}>Get Started</Text>
                   </LinearGradient>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                  style={styles.forgotPassword}
-                  onPress={() => navigation.navigate('ForgotPassword' as any)}
-                >
-                  <Text style={styles.forgotText}>Forgot Password?</Text>
                 </TouchableOpacity>
               </View>
 
               <View style={styles.footer}>
                 <View style={styles.dividerContainer}>
                   <View style={styles.divider} />
-                  <Text style={styles.dividerText}>Or login with</Text>
+                  <Text style={styles.dividerText}>Or sign up with</Text>
                   <View style={styles.divider} />
                 </View>
 
@@ -157,9 +160,9 @@ const LoginScreen = ({ navigation }: Props) => {
 
                 <TouchableOpacity 
                   style={styles.signUpContainer}
-                  onPress={() => navigation.navigate('SignUp' as any)}
+                  onPress={() => navigation.navigate('Login')}
                 >
-                  <Text style={styles.signUpText}>Don't have an account? <Text style={styles.signUpLink}>Sign Up</Text></Text>
+                  <Text style={styles.signUpText}>Already have an account? <Text style={styles.signUpLink}>Sign In</Text></Text>
                 </TouchableOpacity>
               </View>
             </Animated.View>
@@ -190,8 +193,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     justifyContent: 'center',
   },
+  backButton: {
+    position: 'absolute',
+    top: 20,
+    left: 0,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
   headerTextContainer: {
-    marginBottom: SPACING.xxl,
+    marginBottom: SPACING.xl,
     alignItems: 'center',
   },
   brandTitle: {
@@ -219,7 +234,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputContainer: {
-    marginBottom: SPACING.lg,
+    marginBottom: SPACING.md,
   },
   inputLabel: {
     ...FONTS.label,
@@ -228,7 +243,7 @@ const styles = StyleSheet.create({
     marginLeft: SPACING.xs,
   },
   input: {
-    height: 55,
+    height: 50,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 15,
     paddingHorizontal: SPACING.md,
@@ -253,14 +268,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
   },
-  forgotPassword: {
-    marginTop: SPACING.lg,
-    alignItems: 'center',
-  },
-  forgotText: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 14,
-  },
   footer: {
     marginTop: SPACING.xl,
     alignItems: 'center',
@@ -268,7 +275,7 @@ const styles = StyleSheet.create({
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: SPACING.xl,
+    marginBottom: SPACING.lg,
     width: '100%',
     paddingHorizontal: SPACING.lg,
   },
@@ -285,13 +292,13 @@ const styles = StyleSheet.create({
   socialContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: SPACING.xl,
-    marginBottom: SPACING.xl,
+    gap: SPACING.lg,
+    marginBottom: SPACING.lg,
   },
   socialButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 54,
+    height: 54,
+    borderRadius: 27,
     backgroundColor: 'rgba(255,255,255,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -299,7 +306,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.2)',
   },
   signUpContainer: {
-    marginTop: SPACING.md,
+    marginTop: SPACING.sm,
   },
   signUpText: {
     color: 'rgba(255,255,255,0.6)',
@@ -309,11 +316,6 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontWeight: '700',
   },
-  demoText: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 12,
-    fontStyle: 'italic',
-  },
 });
 
-export default LoginScreen;
+export default SignUpScreen;

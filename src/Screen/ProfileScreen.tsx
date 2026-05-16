@@ -28,7 +28,11 @@ type RootStackParamList = {
   AITripPlanner: undefined;
   SavedDestinations: undefined;
   MyBookings: undefined;
+  PersonalInformation: undefined;
+  Security: undefined;
 };
+
+
 
 interface ProfileSection {
   id: string;
@@ -64,9 +68,18 @@ const ProfileScreen = () => {
       title: 'Personal Information',
       icon: 'person',
       color: '#6366f1',
-      onPress: () => { },
+      onPress: () => navigation.navigate('PersonalInformation'),
       showArrow: true,
     },
+    {
+      id: 'security',
+      title: 'Security & Privacy',
+      icon: 'security',
+      color: '#f59e0b',
+      onPress: () => navigation.navigate('Security'),
+      showArrow: true,
+    },
+
     {
       id: 'my-bookings',
       title: 'My Bookings',

@@ -5,6 +5,8 @@ import { StyleSheet, View } from 'react-native';
 import { navigationRef } from './src/navigation/NavigationService';
 import MainScreen from './src/Screen/MainScreen';
 import LoginScreen from './src/Screen/LoginScreen';
+import SignUpScreen from './src/Screen/SignUpScreen';
+import ForgotPasswordScreen from './src/Screen/ForgotPasswordScreen';
 import Bali from './src/Screen/Bali';
 import Maldives from './src/Screen/Maldives';
 import Thailand from './src/Screen/Thailand';
@@ -26,6 +28,10 @@ import Payment from './src/Screen/Payment';
 import MyBookings from './src/Screen/MyBookings';
 import { BookingProvider } from './src/Context/BookingContext';
 import Footer from './src/Screen/Footer';
+import PersonalInformation from './src/Screen/PersonalInformation';
+import SecurityScreen from './src/Screen/SecurityScreen';
+
+
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -62,6 +68,18 @@ const App = () => {
                 name="Login"
                 component={LoginScreen}
                 options={{ title: 'Login' }}
+              />
+
+              <Stack.Screen
+                name="SignUp"
+                component={SignUpScreen}
+                options={{ title: 'Sign Up' }}
+              />
+
+              <Stack.Screen
+                name="ForgotPassword"
+                component={ForgotPasswordScreen}
+                options={{ title: 'Forgot Password' }}
               />
 
               <Stack.Screen
@@ -171,6 +189,20 @@ const App = () => {
                 component={SavedDestinations}
                 options={{ title: 'Saved Destinations' }}
               />
+
+              <Stack.Screen
+                name="PersonalInformation"
+                component={PersonalInformation}
+                options={{ title: 'Personal Information' }}
+              />
+
+              <Stack.Screen
+                name="Security"
+                component={SecurityScreen}
+                options={{ title: 'Security' }}
+              />
+
+
             </Stack.Navigator>
             <Footer />
           </View>
