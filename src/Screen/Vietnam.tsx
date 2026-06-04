@@ -64,6 +64,13 @@ const Vietnam = ({ navigation }: { navigation: VietnamScreenNavigationProp }) =>
             duration: '3-4 Days',
             description: 'Vietnamese island off the coast of Cambodia in the Gulf of Thailand, known for white-sand beaches and resorts',
         }
+         {
+            name: 'FITO Museum',
+            image: require('../assets/Lakshadweep.webp'),
+            rating: 4.4,
+            duration: '3-4 Days',
+            description: 'the history of traditional Vietnamese medicine through ancient tools, herbal remedies and historical artifacts.',
+        }
     ];
 
     const headerHeight = scrollY.interpolate({
