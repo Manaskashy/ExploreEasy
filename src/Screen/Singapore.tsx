@@ -63,7 +63,22 @@ const Singapore = ({ navigation }: { navigation: SingaporeScreenNavigationProp }
             rating: 4.7,
             duration: '1 Hour',
             description: 'Famous landmark featuring a statue of the mythical Merlion, symbol of Singapore',
+        },
+         {
+            name: 'Aloft by Marriott Singapore Novena',
+            image: require('../assets/Lakshadweep.webp'),
+            rating: 4.6,
+            duration: 'Unlimited Hour',
+            description: 'Forward-thinking hotel in Singapore city center with a pool, event space and Halal-certified dining.',
+        },
+         {
+            name: 'National Orchid Garden',
+            image: require('../assets/Lakshadweep.webp'),
+            rating: 4.7,
+            duration: '1 Hour',
+            description: 'the National Orchid Garden, where there are thousands of beautiful orchids blooming outdoors and in the coolhouse.',
         }
+        
     ];
 
     const headerHeight = scrollY.interpolate({
